@@ -1,3 +1,5 @@
+# x, y: location of a cell (0-origin)
+# v: value in the cell (ORG-origin, internally 0-origin)
 module NumberPlacement
   N = 9
   M = 3
@@ -5,6 +7,7 @@ module NumberPlacement
 
   class PlacementError < StandardError; end
 
+  # Sub-board that shares set of numbers
   class Neighbors
     attr_reader :floating
     attr_reader :cells
@@ -28,6 +31,7 @@ module NumberPlacement
       @floating[v] = false
     end
 
+    # Array of cells where valuve v can be placed
     def placeable(v, board)
       unless @floating[v]
         return []
@@ -46,6 +50,7 @@ module NumberPlacement
   end
 
   class Board
+    # number (ORG-origin) or `-` for empty cells
     def Board.parse(str)
       b = Board.new
       str.scan(/[\d-]/).each_with_index do |s, i|
@@ -82,10 +87,12 @@ module NumberPlacement
       @placed == N*N
     end
 
+    # Array of Neighbors that share the cell
     def neighbors(x, y)
       @neighbors[[x,y]]
     end
 
+    # Hash: v => number of cells value can be placed
     def candidates(x, y)
       f = Hash.new
       (0...N).each do |i|
@@ -101,10 +108,12 @@ module NumberPlacement
       return f
     end
 
+    # value in the cell
     def [](x, y)
       @values[[x,y]]
     end
 
+    # place value in the cell
     def []=(x, y, v)
       @neighbors[[x,y]].each do |n|
         n.place(x, y, v)
