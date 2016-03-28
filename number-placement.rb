@@ -20,7 +20,7 @@ module NumberPlacement
 
     def place(x, y, v)
       unless @floating[v]
-        raise PlacementError, "#{v} is already taken"
+        raise PlacementError, "#{v + ORG} is already taken"
       end
       unless @cells.delete([x,y])
         raise PlacementError, "#{x},#{y} is already taken"
@@ -144,6 +144,8 @@ _END
 b = Board.parse(str)
 puts b
 puts
+
+gets
 
 x = y = 0
 while !b.complete?
