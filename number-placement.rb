@@ -1,9 +1,9 @@
 # x, y: location of a cell (0-origin)
-# v: value in the cell (ORG-origin, internally 0-origin)
+# v: value in the cell
 module NumberPlacement
-  N = 9
-  M = 3
-  ORG = 1
+  Values = (1..9).to_a
+  N = Values.size
+  M = Math.sqrt(N).to_i
 
   class PlacementError < StandardError; end
 
@@ -13,7 +13,7 @@ module NumberPlacement
     attr_reader :cells
 
     def initialize
-      @floating = Array.new(N, true)
+      @floating = Hash.new{|h, k| h[k] =true}
       @cells = Array.new
     end
 
@@ -23,7 +23,7 @@ module NumberPlacement
 
     def place(x, y, v)
       unless @floating[v]
-        raise PlacementError, "#{v + ORG} is already taken"
+        raise PlacementError, "#{v} is already taken"
       end
       unless @cells.delete([x,y])
         raise PlacementError, "#{x},#{y} is already taken"
@@ -50,13 +50,13 @@ module NumberPlacement
   end
 
   class Board
-    # number (ORG-origin) or `-` for empty cells
+    # number or `-` for empty cells
     def Board.parse(str)
       b = Board.new
       str.scan(/[\d-]/).each_with_index do |s, i|
         if s =~ /\d/
           y, x = i.divmod(N)
-          b[x,y] = Integer(s) - ORG
+          b[x,y] = Integer(s)
         end
       end
       return b
@@ -107,9 +107,9 @@ module NumberPlacement
     # Hash: v => number of cells value can be placed
     def candidates(x, y)
       f = Hash.new
-      (0...N).each do |i|
-        f[i] = @neighbors[[x,y]].map{|n|
-          cs = n.placeable(i, self)
+      Values.each do |v|
+        f[v] = @neighbors[[x,y]].map{|n|
+          cs = n.placeable(v, self)
           if cs.include?([x,y])
             cs.size
           else
@@ -151,7 +151,7 @@ module NumberPlacement
       (0...N).each do |y|
         (0...N).each do |x|
           v = @values[[x,y]]
-          r << (v ? " #{(v + ORG).to_s} " : ' _ ')
+          r << (v ? " #{v} " : ' _ ')
         end
         r << "\n"
       end
