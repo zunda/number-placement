@@ -1,9 +1,6 @@
 # x, y: location of a cell (0-origin)
 # v: value in the cell
 module NumberPlacement
-  Values = (1..9).to_a
-  N = Values.size
-  M = Math.sqrt(N).to_i
 
   class PlacementError < StandardError; end
 
@@ -50,6 +47,10 @@ module NumberPlacement
   end
 
   class Board
+    Values = (1..9).to_a
+    N = Values.size
+    M = Math.sqrt(N).to_i
+
     # number or `-` for empty cells
     def Board.parse(str)
       b = Board.new
