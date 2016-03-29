@@ -62,6 +62,18 @@ module NumberPlacement
       return b
     end
 
+    def Board.next_cell_from(x, y)
+      x += 1
+      if x >= N
+        x = 0
+        y += 1
+        if y >= N
+          y = 0
+        end
+      end
+      return x, y
+    end
+
     def initialize
       @values = Hash.new
       @neighbors = Hash.new
@@ -106,6 +118,18 @@ module NumberPlacement
         }.min
       end
       return f
+    end
+
+    # Find location x, y for a firm candidate v, or nil
+    def next_firm(x0, y0)
+      xc, yc = x0, y0
+      begin
+        if v = self.candidates(xc, yc).key(1)
+          return xc, yc, v
+        end
+        xc, yc = Board.next_cell_from(xc, yc)
+      end while xc != x0 or yc != y0
+      return nil
     end
 
     # value in the cell
@@ -154,21 +178,16 @@ b = Board.parse(str)
 puts b
 puts
 
-gets
-
 x = y = 0
 while !b.complete?
-  if v = b.candidates(x, y).key(1)
+  x, y, v = b.next_firm(x, y)
+  if x and y and v
     b[x, y] = v
     puts b
     puts
-  end
-  x += 1
-  if x >= N
-    x = 0
-    y += 1
-    if y >= N
-      y = 0
-    end
+    x, y = Board.next_cell_from(x, y)
+  else
+    puts "Solution is not found"
+    exit
   end
 end
