@@ -75,6 +75,14 @@ module NumberPlacement
       return x, y
     end
 
+    def Board.each_cell
+      x, y = 0, 0
+      begin
+        yield(x, y)
+        x, y = Board.next_cell_from(x, y)
+      end while x != 0 or y != 0
+    end
+
     def initialize
       @values = Hash.new
       @neighbors = Hash.new
