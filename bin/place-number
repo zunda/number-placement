@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # x, y: location of a cell (0-origin)
 # v: value in the cell
 module NumberPlacement
