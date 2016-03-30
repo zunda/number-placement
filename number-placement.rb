@@ -169,9 +169,10 @@ module NumberPlacement
   end
 end
 
-include NumberPlacement
+if __FILE__ == $0
+  include NumberPlacement
 
-str = <<_END
+  str = <<_END
 78-----46
 --63-----
 1---89---
@@ -183,20 +184,21 @@ str = <<_END
 83-----51
 _END
 
-b = Board.parse(str)
-puts b
-puts
+  b = Board.parse(str)
+  puts b
+  puts
 
-x = y = 0
-while !b.complete?
-  x, y, v = b.next_firm(x, y)
-  if x and y and v
-    b[x, y] = v
-    puts b
-    puts
-    x, y = Board.next_cell_from(x, y)
-  else
-    puts "Solution is not found"
-    exit
+  x = y = 0
+  while !b.complete?
+    x, y, v = b.next_firm(x, y)
+    if x and y and v
+      b[x, y] = v
+      puts b
+      puts
+      x, y = Board.next_cell_from(x, y)
+    else
+      puts "Solution is not found"
+      exit
+    end
   end
 end
