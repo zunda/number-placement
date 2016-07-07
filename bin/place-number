@@ -2,19 +2,7 @@
 require 'number-placement'
 include NumberPlacement
 
-str = <<_END
-78-----46
---63-----
-1---89---
--75---81-
----4-5---
--91---43-
----83---4
------46--
-83-----51
-_END
-
-b = Board.parse(str)
+b = Board.parse(ARGF.read)
 puts b
 puts
 
