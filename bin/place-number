@@ -23,7 +23,7 @@ while !b.complete?
   x, y, v = b.next_firm(x, y)
   if x and y and v
     b[x, y] = v
-    puts b
+    puts b.to_s(x, y)
     puts
     x, y = Board.next_cell_from(x, y)
   else

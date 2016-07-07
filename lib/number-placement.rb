@@ -155,12 +155,16 @@ module NumberPlacement
       @values[[x,y]] = v
     end
 
-    def to_s
+    def to_s(markx = nil, marky = nil)
       r = ''
       (0...N).each do |y|
         (0...N).each do |x|
           v = @values[[x,y]]
-          r << (v ? " #{v} " : ' _ ')
+          if x == markx and y == marky
+            r << (v ? "[#{v}]" : '[_]')
+          else
+            r << (v ? " #{v} " : ' _ ')
+          end
         end
         r << "\n"
       end
